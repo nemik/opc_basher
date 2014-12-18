@@ -1,0 +1,12 @@
+This project was created to display Open Pixel Control (OPC) animations to a Fadecandy board, running on a TP-Link WR703n device.
+
+I use this device inside a project box to control a strand of 40 RGB outdoor LED balls. Normally I use websockets on a webpage with Javascript, but having long-running animations this way is not possible, they stop when I exit the browser or go to a different page, as they should.
+
+So I wanted a way to keep them running perpetually, preferably on the same unit running fcserver, which is the cheapo OpenWRT TP-Link device. The best way to do this would be to install Lua (because it's very lightweight and fast) along with the excellent Nixio library for it to do networking to the fcserver. Then you could write OPC animations in Lua! I hope to do that eventually, but this project was built out of laziness. I didn't want to create a new TP-Link image with those utils.
+
+So I opted instead to do animations on it using what's already on the box: bash (well, ash) and netcat!
+
+This python script will generate a "Christmas" sequence of alternating red and green colours along the pixel strand, then invert them, so that the ones that were green become red, and vice-versa. When you run this python script, it'll generate an "animation.sh" with the right netcat commands and a delay between the 'frames' of the animation.
+
+To install this to your TP-Link device running fcserver, do "scp animation.sh root@your-device-ip:animation.sh"
+Then SSH into your TP-Link device and run "ash animation.sh &" and logout. You'll see the strand connected to your TP-Link's Fadecandy unit play the animation over and over.
